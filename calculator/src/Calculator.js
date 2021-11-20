@@ -16,7 +16,7 @@ export default class Calculator extends React.Component {
         };
     }
 
-    chooseOperator = (operator) => {
+    selectOperator = (operator) => {
         switch (operator) {
             case 'AC':
                 this.setState({
@@ -25,19 +25,40 @@ export default class Calculator extends React.Component {
                     operatorFunc: null,
                     secondNum: '',
                     result: ''
-                })
+                });
                 break;
             case '.':
                 /////////////////////////////////////////////////////////////////////////
                 this.updateNumbers(operator);
                 break;
+            case '=':
+                this.equals();
+                break;
             default:
-                this.setState(prevState => ({
-                    operatorFunc: getOperatorFunc(operator),
-                    display: prevState.display.concat(operator)
-                }));
+                this.displayOperator(operator);
                 break;
         }
+    }
+    displayOperator = (operator) => {
+        let display = this.state.display;
+        if(!display) return;
+        const lastChar = display[display.length - 1];
+        display = Number(lastChar) || lastChar === '0'
+        ? display.concat(operator)
+        : display.slice(0, -1).concat(operator);
+        this.setState({
+            operatorFunc: getOperatorFunc(operator),
+            display
+        });
+    }
+
+    equals = () => {
+        const state = this.state;
+        const result = this.state.operatorFunc(Number(state.firstNum), Number(state.secondNum));
+        this.setState({
+            result,
+            firstNum: result
+        });
     }
 
     updateNumbers = (num) => {
@@ -45,7 +66,7 @@ export default class Calculator extends React.Component {
         if(!state.secondNum && !state.operatorFunc) {
             this.setState(prevState => ({
                 firstNum: prevState.firstNum.concat(num),
-                display: prevState.firstNum.concat(num)
+                display: prevState.display.concat(num)
             }));
         }
         else if(state.firstNum && state.operatorFunc) {
@@ -61,7 +82,7 @@ export default class Calculator extends React.Component {
             <div id="calculator">
                 <CalcHead display={this.state.display} result={this.state.result} />
                 <Numbers onClick={this.updateNumbers} />
-                <Operations onClick={this.chooseOperator} />
+                <Operations onClick={this.selectOperator} />
             </div>
         )
     }
