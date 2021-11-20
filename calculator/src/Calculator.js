@@ -11,7 +11,7 @@ export default class Calculator extends React.Component {
             display: '',
             firstNum: '',
             secondNum: '',
-            operatorFunc: null,
+            operator: null,
             result: ''
         };
     }
@@ -22,7 +22,7 @@ export default class Calculator extends React.Component {
                 this.setState({
                     display: '',
                     firstNum: '',
-                    operatorFunc: null,
+                    operator: null,
                     secondNum: '',
                     result: ''
                 });
@@ -47,29 +47,39 @@ export default class Calculator extends React.Component {
         ? display.concat(operator)
         : display.slice(0, -1).concat(operator);
         this.setState({
-            operatorFunc: getOperatorFunc(operator),
+            operator,
             display
         });
     }
 
     equals = () => {
         const state = this.state;
-        const result = this.state.operatorFunc(Number(state.firstNum), Number(state.secondNum));
-        this.setState({
+        const operatorFunc = getOperatorFunc(this.state.operator);
+        const result = operatorFunc(Number(state.firstNum), Number(state.secondNum));
+        this.setState(prevState => ({
+            display: `${prevState.firstNum}${prevState.operator}${prevState.secondNum}`,
             result,
-            firstNum: result
-        });
+            operator: null,
+            firstNum: '',
+            secondNum: ''
+        }));
     }
 
     updateNumbers = (num) => {
         const state = this.state;
-        if(!state.secondNum && !state.operatorFunc) {
+        if(state.result){
+            this.setState({
+                display:'',
+                result: ''
+            })
+        }
+        if(!state.secondNum && !state.operator) {
             this.setState(prevState => ({
                 firstNum: prevState.firstNum.concat(num),
                 display: prevState.display.concat(num)
             }));
         }
-        else if(state.firstNum && state.operatorFunc) {
+        else if(state.firstNum && state.operator) {
             this.setState(prevState => ({
                 secondNum: prevState.secondNum.concat(num),
                 display: prevState.display.concat(num)
