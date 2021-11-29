@@ -38,7 +38,7 @@ export default function Operations(props) {
 
     return (
         <>
-            {renderOperations(['+', '-', 'X', '/'])}
+            {renderOperations(['+', '-', '*', '/'])}
             {renderEquals()}
             {renderClear()}
             {renderDecimal()}
@@ -49,6 +49,6 @@ export default function Operations(props) {
 const opLiteral = {
     '+': 'add',
     '-': 'abstract',
-    'X': 'multiply',
+    '*': 'multiply',
     '/': 'divide',
 }

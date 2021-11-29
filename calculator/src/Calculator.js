@@ -26,30 +26,17 @@ export default function Calculator() {
     }
 
     // Default function for operators. Selects it as opeartor and displays it if relevant.
-    const selectOperator = (operator) => {
-        if(checkExistingOperator()) return;
-        setDisplay(display.concat(operator));
+    const selectOperator = (op) => {
+        // Check if clicked when there are no numbers or when operator has already been selected.
+        if(!firstNum || secondNum) return;
+        // Checks if operator is clicked after an operator has already been selected.
+        const arithmetics = ['+', '-', '/', '*'];
+        const lastDisplayChar = display[display.length-1];
+        if(arithmetics.find(arithmetic => arithmetic === lastDisplayChar)){
+            setDisplay(display.slice(0, -1).concat(op));
+        }
+        setOperator(op)
     }
-    // Handles cases of a clicked operator when an operator has already been selected.
-    const checkExistingOperator = () => {
-        // check if an operator has already been selected
-        // check if the operator is last (for changing)
-    }
-    
-
-    /*
-    const displayOperator = (operator) => {
-        let display = this.state.display;
-        if(!display) return;
-        const lastChar = display[display.length - 1];
-        display = Number(lastChar) || lastChar === '0'
-        ? display.concat(operator)
-        : display.slice(0, -1).concat(operator);
-        this.setState({
-            operator,
-            display
-        });
-    }*/
 
     const equals = () => {
         const state = this.state;
