@@ -1,45 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CalcHead from './CalcHead';
 import Numbers from './Numbers';
 import Operations from './Operations';
 import getOperatorFunc from './helpers/mathFunctions';
 
-export default class Calculator extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            display: '',
-            firstNum: '',
-            secondNum: '',
-            operator: null,
-            result: ''
-        };
+export default function Calculator() {
+    const [firstNum, setFirstNum] = useState('');
+    const [secondNum, setSecondNum] = useState('');
+    const [operator, setOperator] = useState('');
+    const [result, setResult] = useState('');
+    const [display, setDisplay] = useState('');
+
+    // Updates calc display when one of the numbers or the operator changes.
+    useEffect(() => {
+        setDisplay(firstNum+operator+secondNum);
+    },[firstNum, secondNum, operator])
+
+    // Calc reset function for AC button.
+    const resetCalc = () => {
+        setFirstNum('');
+        setSecondNum('');
+        setOperator('');
+        setResult('');
+        setDisplay('');
     }
 
-    selectOperator = (operator) => {
-        switch (operator) {
-            case 'AC':
-                this.setState({
-                    display: '',
-                    firstNum: '',
-                    operator: null,
-                    secondNum: '',
-                    result: ''
-                });
-                break;
-            case '.':
-                /////////////////////////////////////////////////////////////////////////
-                this.updateNumbers(operator);
-                break;
-            case '=':
-                this.equals();
-                break;
-            default:
-                this.displayOperator(operator);
-                break;
-        }
+    // Default function for operators. Selects it as opeartor and displays it if relevant.
+    const selectOperator = (operator) => {
+        if(checkExistingOperator()) return;
+        setDisplay(display.concat(operator));
     }
-    displayOperator = (operator) => {
+    // Handles cases of a clicked operator when an operator has already been selected.
+    const checkExistingOperator = () => {
+        // check if an operator has already been selected
+        // check if the operator is last (for changing)
+    }
+    
+
+    /*
+    const displayOperator = (operator) => {
         let display = this.state.display;
         if(!display) return;
         const lastChar = display[display.length - 1];
@@ -50,9 +49,9 @@ export default class Calculator extends React.Component {
             operator,
             display
         });
-    }
+    }*/
 
-    equals = () => {
+    const equals = () => {
         const state = this.state;
         const operatorFunc = getOperatorFunc(this.state.operator);
         const result = operatorFunc(Number(state.firstNum), Number(state.secondNum));
@@ -65,7 +64,14 @@ export default class Calculator extends React.Component {
         }));
     }
 
-    updateNumbers = (num) => {
+    // Groups togethers functions for any clicked operator other than the basic 4.
+    const specialOperatorsFuncs = {
+        clear: resetCalc,
+        // decimal: decimal
+        // equals: equalsClicked
+    }
+
+    const updateNumbers = (num) => {
         const state = this.state;
         if(state.result){
             this.setState({
@@ -87,13 +93,11 @@ export default class Calculator extends React.Component {
         }
     }
 
-    render() {
-        return (
-            <div id="calculator">
-                <CalcHead display={this.state.display} result={this.state.result} />
-                <Numbers onClick={this.updateNumbers} />
-                <Operations onClick={this.selectOperator} />
-            </div>
-        )
-    }
+    return (
+        <div id="calculator">
+            <CalcHead display={display} result={result} />
+            <Numbers onClick={updateNumbers} />
+            <Operations arithmeticFunc={selectOperator} specialsFuncs={specialOperatorsFuncs} />
+        </div>
+    )
 }
