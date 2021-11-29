@@ -8,8 +8,8 @@ export default function Calculator() {
     const [firstNum, setFirstNum] = useState('');
     const [secondNum, setSecondNum] = useState('');
     const [operator, setOperator] = useState('');
-    const [result, setResult] = useState('');
     const [display, setDisplay] = useState('');
+    const [result, setResult] = useState('0');
 
     // Updates calc display when one of the numbers or the operator changes.
     useEffect(() => {
@@ -21,7 +21,7 @@ export default function Calculator() {
         setFirstNum('');
         setSecondNum('');
         setOperator('');
-        setResult('');
+        setResult('0');
         setDisplay('');
     }
 
@@ -36,12 +36,12 @@ export default function Calculator() {
             setDisplay(display.slice(0, -1).concat(op));
         }
         setOperator(op)
+        setResult(op);
     }
 
     const equals = () => {
         if(!secondNum) return;
         const operatorFunc = getOperatorFunc(operator);
-        console.log(operatorFunc);
         const calcResult = operatorFunc(Number(firstNum), Number(secondNum));
         setResult(calcResult);
     }
@@ -70,8 +70,16 @@ export default function Calculator() {
     }
 
     const displayNum = (num) => {
-        if(operator) setSecondNum(secondNum.concat(num))
-        else setFirstNum(firstNum.concat(num))
+        if(operator){
+            if(!secondNum && num === '0') return;
+            setSecondNum(secondNum.concat(num));
+            setResult(secondNum.concat(num));
+        }
+        else {
+            if(!firstNum && num === '0') return;
+            setFirstNum(firstNum.concat(num));
+            setResult(firstNum.concat(num));
+        }
     }
 
     // const updateNumbers = (num) => {
