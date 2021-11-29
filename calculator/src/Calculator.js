@@ -71,6 +71,11 @@ export default function Calculator() {
         // equals: equalsClicked
     }
 
+    const displayNum = (num) => {
+        if(operator) setSecondNum(secondNum.concat(num))
+        else setFirstNum(firstNum.concat(num))
+    }
+
     const updateNumbers = (num) => {
         const state = this.state;
         if(state.result){
@@ -96,7 +101,7 @@ export default function Calculator() {
     return (
         <div id="calculator">
             <CalcHead display={display} result={result} />
-            <Numbers onClick={updateNumbers} />
+            <Numbers onClick={displayNum} />
             <Operations arithmeticFunc={selectOperator} specialsFuncs={specialOperatorsFuncs} />
         </div>
     )

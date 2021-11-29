@@ -9,7 +9,7 @@ export default function Numbers(props) {
                 <button
                     id={numId}
                     className="numbers"
-                    onClick={() => this.props.onClick(i)}
+                    onClick={() => props.onClick(`${i}`)}
                 >{i}</button>);
         }
         return calcNumbers;
