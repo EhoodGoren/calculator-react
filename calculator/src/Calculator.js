@@ -39,23 +39,34 @@ export default function Calculator() {
     }
 
     const equals = () => {
-        const state = this.state;
-        const operatorFunc = getOperatorFunc(this.state.operator);
-        const result = operatorFunc(Number(state.firstNum), Number(state.secondNum));
-        this.setState(prevState => ({
-            display: `${prevState.firstNum}${prevState.operator}${prevState.secondNum}`,
-            result,
-            operator: null,
-            firstNum: '',
-            secondNum: ''
-        }));
+        if(!secondNum) return;
+        const operatorFunc = getOperatorFunc(operator);
+        console.log(operatorFunc);
+        const calcResult = operatorFunc(Number(firstNum), Number(secondNum));
+        setResult(calcResult);
+    }
+    // const equals = () => {
+    //     const state = this.state;
+    //     const operatorFunc = getOperatorFunc(this.state.operator);
+    //     const result = operatorFunc(Number(state.firstNum), Number(state.secondNum));
+    //     this.setState(prevState => ({
+    //         display: `${prevState.firstNum}${prevState.operator}${prevState.secondNum}`,
+    //         result,
+    //         operator: null,
+    //         firstNum: '',
+    //         secondNum: ''
+    //     }));
+    // }
+
+    const decimal = () => {
+        console.log('decimal');
     }
 
     // Groups togethers functions for any clicked operator other than the basic 4.
     const specialOperatorsFuncs = {
         clear: resetCalc,
-        // decimal: decimal
-        // equals: equalsClicked
+        equals,
+        decimal
     }
 
     const displayNum = (num) => {
@@ -63,27 +74,27 @@ export default function Calculator() {
         else setFirstNum(firstNum.concat(num))
     }
 
-    const updateNumbers = (num) => {
-        const state = this.state;
-        if(state.result){
-            this.setState({
-                display:'',
-                result: ''
-            })
-        }
-        if(!state.secondNum && !state.operator) {
-            this.setState(prevState => ({
-                firstNum: prevState.firstNum.concat(num),
-                display: prevState.display.concat(num)
-            }));
-        }
-        else if(state.firstNum && state.operator) {
-            this.setState(prevState => ({
-                secondNum: prevState.secondNum.concat(num),
-                display: prevState.display.concat(num)
-            }));
-        }
-    }
+    // const updateNumbers = (num) => {
+    //     const state = this.state;
+    //     if(state.result){
+    //         this.setState({
+    //             display:'',
+    //             result: ''
+    //         })
+    //     }
+    //     if(!state.secondNum && !state.operator) {
+    //         this.setState(prevState => ({
+    //             firstNum: prevState.firstNum.concat(num),
+    //             display: prevState.display.concat(num)
+    //         }));
+    //     }
+    //     else if(state.firstNum && state.operator) {
+    //         this.setState(prevState => ({
+    //             secondNum: prevState.secondNum.concat(num),
+    //             display: prevState.display.concat(num)
+    //         }));
+    //     }
+    // }
 
     return (
         <div id="calculator">

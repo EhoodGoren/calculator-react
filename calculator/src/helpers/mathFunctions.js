@@ -20,7 +20,7 @@ export default function getOperatorFunc(operator) {
             return add;
         case '-':
             return abstract;
-        case 'X':
+        case '*':
             return multiply;
         case '/':
             return divide;

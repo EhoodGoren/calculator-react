@@ -48,7 +48,7 @@ export default function Operations(props) {
 
 const opLiteral = {
     '+': 'add',
-    '-': 'abstract',
+    '-': 'subtract',
     '*': 'multiply',
     '/': 'divide',
 }
