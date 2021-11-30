@@ -28,7 +28,7 @@ export default function Calculator() {
     // Default function for operators. Selects it as opeartor and displays it if relevant.
     const selectOperator = (op) => {
         // Check if clicked when there are no numbers or when operator has already been selected.
-        if(secondNum) return calcAfterResult(op);
+        if(secondNum && secondNum !== '-') return calcAfterResult(op);
         if(!firstNum || (secondNum !== '-' && secondNum)) return;
         // Checks if operator is clicked after an operator has already been selected.
         const arithmetics = ['+', '-', '/', '*'];
