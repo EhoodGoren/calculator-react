@@ -28,35 +28,38 @@ export default function Calculator() {
     // Default function for operators. Selects it as opeartor and displays it if relevant.
     const selectOperator = (op) => {
         // Check if clicked when there are no numbers or when operator has already been selected.
-        if(!firstNum || secondNum) return;
+        if(!firstNum || (secondNum !== '-' && secondNum)) return;
         // Checks if operator is clicked after an operator has already been selected.
         const arithmetics = ['+', '-', '/', '*'];
         const lastDisplayChar = display[display.length-1];
         if(arithmetics.find(arithmetic => arithmetic === lastDisplayChar)){
-            setDisplay(display.slice(0, -1).concat(op));
+            if(op === '-') {
+                if(arithmetics.find(arithmetic => arithmetic === display[display.length-2])) return
+                setSecondNum('-');
+                setDisplay(display.concat(op));
+                setResult(op);
+                return
+            }
+            else {
+                if(arithmetics.find(arithmetic => arithmetic === display[display.length-2])){
+                    setDisplay(display.slice(0, -2).concat(op));
+                    setSecondNum('');
+                }
+                else {
+                    setDisplay(display.slice(0, -1).concat(op));
+                }
+            }
         }
-        setOperator(op)
+        setOperator(op);
         setResult(op);
     }
 
     const equals = () => {
-        if(!secondNum) return;
+        if(!secondNum || secondNum === '-') return;
         const operatorFunc = getOperatorFunc(operator);
         const calcResult = operatorFunc(Number(firstNum), Number(secondNum));
         setResult(calcResult);
     }
-    // const equals = () => {
-    //     const state = this.state;
-    //     const operatorFunc = getOperatorFunc(this.state.operator);
-    //     const result = operatorFunc(Number(state.firstNum), Number(state.secondNum));
-    //     this.setState(prevState => ({
-    //         display: `${prevState.firstNum}${prevState.operator}${prevState.secondNum}`,
-    //         result,
-    //         operator: null,
-    //         firstNum: '',
-    //         secondNum: ''
-    //     }));
-    // }
 
     const decimal = () => {
         console.log('decimal');
