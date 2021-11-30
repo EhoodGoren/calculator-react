@@ -71,7 +71,12 @@ export default function Calculator() {
     }
 
     const decimal = () => {
-        console.log('decimal');
+        if(!operator) {
+            if(firstNum && !firstNum.includes('.')) setFirstNum(firstNum.concat('.'));
+        }
+        else {
+            if(secondNum && !secondNum.includes('.')) setSecondNum(secondNum.concat('.'));
+        }
     }
 
     // Groups togethers functions for any clicked operator other than the basic 4.
@@ -93,28 +98,6 @@ export default function Calculator() {
             setResult(firstNum.concat(num));
         }
     }
-
-    // const updateNumbers = (num) => {
-    //     const state = this.state;
-    //     if(state.result){
-    //         this.setState({
-    //             display:'',
-    //             result: ''
-    //         })
-    //     }
-    //     if(!state.secondNum && !state.operator) {
-    //         this.setState(prevState => ({
-    //             firstNum: prevState.firstNum.concat(num),
-    //             display: prevState.display.concat(num)
-    //         }));
-    //     }
-    //     else if(state.firstNum && state.operator) {
-    //         this.setState(prevState => ({
-    //             secondNum: prevState.secondNum.concat(num),
-    //             display: prevState.display.concat(num)
-    //         }));
-    //     }
-    // }
 
     return (
         <div id="calculator">
